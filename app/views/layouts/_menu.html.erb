@@ -1,0 +1,66 @@
+<div class="glossymenu">
+  <a class="menuitem" href="<%= root_url %>" >Welcome</a>
+</div>
+<% @menu_sections.each do |section| %>
+  <%
+      header = section.first
+      descendants = section.second
+  %>
+  <div class="glossymenu">
+    <a class="<%= descendants.nil? ? 'menuitem' : 'menuitem submenuheader'%> " 
+       href="<%= browse_documents_path(header) %>" ><%= header.name %>
+    </a>
+    <% unless descendants.nil? %>
+
+      <div class="submenu">
+      <% descendants.each do |descendant| %>
+          <%
+            sub_header = descendant.first
+            sub_descendants = descendant.second
+          %>
+          <% unless sub_descendants.nil? %>
+            <a  class="menuitem categorymenuheader" href="<%=  browse_documents_path(sub_header) %>">
+              <%= sub_header.name %>
+            </a>
+            <div class="categorymenu">
+              <% sub_descendants.each do |sub_descendant| %>
+                <%
+                  sub_descendant_header = sub_descendant.first
+                %>
+                <ul>
+                  <li>
+                    <a href="<%=  browse_documents_path(sub_descendant_header) %>">
+                      <%= sub_descendant_header.name %>
+                    </a>
+                  </li>
+                </ul>
+              <% end %>
+            </div>
+          <% else %>
+            <ul>
+              <li>
+                <a href="<%=  browse_documents_path(sub_header) %>">
+                  <%= sub_header.name %>
+                </a>
+              </li>
+            </ul>
+          <% end %>
+      <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+<% if user_signed_in? %>
+  <div class="glossymenu">
+  <% if is_user_admin? %>
+    <a class="menuitem" href="<%= sections_url %>" >Manage Menus</a>
+    <a class="menuitem" href="<%= admin_users_path %>" >Manage Users</a>
+  <% elsif is_user_editor? %>
+    <a class="menuitem" href="<%= sections_url %>" >Manage Menus</a>
+    <a class="menuitem" href="<%= edit_user_path(current_user) %>" >My Account</a>
+  <% else %>
+    <a class="menuitem" href="<%= edit_user_path(current_user) %>" >My Account</a>
+  <% end %>
+  <a class="menuitem" href="<%= destroy_user_session_path %>" >Log out</a>
+  </div>
+<% end %>

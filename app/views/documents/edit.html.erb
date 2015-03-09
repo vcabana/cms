@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Document Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <%= stylesheet_link_tag "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tag %>
+  </head>
+  <body>
+    <div class="img-top" class="navbar navbar-fixed-top" align="right">
+      <%= image_tag 'header.jpg', :style => 'width: 100%'%>
+    </div><br/>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <!--Page Header-->
+        <div class="navbar">
+          <div class="navbar-inner">
+            <a class="brand" href="#">Edit document "<%= @document.issuance_no %>"</a>
+          </div>
+        </div>
+        <!--Display Flash Messages-->
+        <%= render 'layouts/flash_messages' %>
+        <!--Display Image Icons Menu -->
+        <div class="btn-toolbar" align = "right">
+          <div class="btn-group">
+            <a href="#upload_file" role="button" class="btn btn-primary" data-toggle="modal" title="Upload File"><i class="icon-upload"></i>Upload File</a>
+            <%= link_to (image_tag(" ", :class=>"icon-home" ))+ ' Home', browse_documents_path(@document.section), :class=>"btn btn-primary", :title=>"Home" if @document.is_edited %>
+            <%= link_to (image_tag(" ", :class=>"icon-info-sign" ))+ ' View', @document, :class=>"btn btn-primary", :title=>"View" %>
+            <%= link_to (image_tag(" ", :class=>"icon-step-backward" )) + ' Back', 'javascript:history.back()', :class=>"btn btn-primary", :title=>"Back to Previous Page" %>
+            <% unless @document.attached_files.empty? %>
+              <a href="#view_attached_files" role="button" class="btn btn-primary" data-toggle="modal" title="View Attached File(s)"><i class="icon-download-alt"></i>View Attached File(s)</a>
+            <% end %>
+          </div>
+        </div>
+        <br/>
+        <legend>Document Details</legend>
+        <%= render 'form' %>
+        <!-- Modal for Uploading of Files -->
+        <div id="upload_file" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Click to close window">×</button>
+              <p id="myModalLabel">Upload File to <%= ("\"" + @document.issuance_no + "\"") unless @document.issuance_no.nil?%></p>
+            </div>
+            <div class="modal-body">
+              <%= render :partial => 'attached_files/form', :locals => { :document_id => @document.id}  %>
+            </div>
+            <div class="modal-footer">
+              <div>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+              </div>
+            </div>
+        </div>
+        <!-- View Attached Files -->
+        <div id="view_attached_files" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Click to close window">×</button>
+              <p id="myModalLabel">Attached File(s)</p>
+            </div>
+            <div class="modal-body">
+              <!-- Table -->
+              <table class="table table-bordered-darker">
+                <% unless @document.attached_files.empty? %>
+
+                  <% @document.attached_files.each do |attached_file| %>
+                   <tr>
+                     <td style="cursor: pointer; padding: 3px;"
+                            title="Click to download file"
+                            onclick="location.href='../../download_file/<%= attached_file.id %>'; return false;">
+                      <%= attached_file.file_name %>
+                     </td>
+                     <td>
+                        <a href="#edit_upload_file_<%=  attached_file.id %>" role="button"
+                          class="btn" data-toggle="modal" title="Edit File">
+                          <i class="icon-edit"></i>
+                        </a>
+                        <%= link_to (image_tag(" ", :class=>"icon-trash" )), delete_attached_file_path(attached_file), :confirm => "Are you sure?", :method => :delete, :class=>"btn", :title=>"Delete File" %>
+                     </td>
+                     <!-- Modal for editing uploaded of files -->
+                     <div id="edit_upload_file_<%=  attached_file.id %>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Click to close window">×</button>
+                        <h3 id="myModalLabel">Edit file "<%= attached_file.file_name %>"</h3>
+                      </div>
+                      <div class="modal-body">
+                        <% params[:attached_file] = attached_file %>
+                        <%= render :partial => 'attached_files/form' %>
+                      </div>
+                      <div class="modal-footer">
+                        <div>
+                          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        </div>
+                      </div>
+                     </div>
+                   </tr>
+                  <% end %>
+
+                <% end %>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <div>
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+              </div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

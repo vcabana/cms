@@ -1,0 +1,31 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+<% if ( !params[:user].blank? && params[:user][:email].blank? && ( params[:controller] == "admin/sessions" ) ) %>
+    <div class="alert alert-error"
+           align="center">
+        <a class="close" data-dismiss="alert">&#215;</a>
+        Invalid email or password
+    </div>
+<% else %>
+  <% flash.each do |name, msg| %>
+    <% if ( msg.is_a?(String) && !msg.empty? ) || ( msg.is_a?(Array) ) %>
+      <div class="alert alert-<%= name == :notice ? "success" : "error" %>"
+           align="<%= user_signed_in? ? "" : "center" %>">
+        <a class="close" data-dismiss="alert">&#215;</a>
+        <% if ( msg.is_a?(String) && !msg.empty? ) %>
+          <%= content_tag :div, msg, :id => "flash_#{name}" %>
+        <% elsif msg.is_a?(Array)  %>
+          <% msg.each do |message| %>
+              <%- if ( message.is_a?(String) && !message.empty? ) -%>
+                <%= content_tag :p, message, :id => "flash_#{name}" %>
+              <%- end -%>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+  <% flash.clear() %>
+<% end %>
+

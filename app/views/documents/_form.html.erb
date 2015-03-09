@@ -1,0 +1,31 @@
+<%= form_for @document, :html => {:class => "form-horizontal"} do |f| %>
+
+  <%= control_group f, :section_id do %>
+    <strong><%= f.collection_select :section_id, Section.all, :id, :lineage_name, :include_blank => '' %></strong>
+  <% end %>
+
+  <%= control_group f, :issuance_no do %>
+    <strong><%= f.text_field :issuance_no %></strong>
+  <% end %>
+
+  <%= control_group f, :signatory do %>
+    <strong><%= f.text_field :signatory %></strong>
+  <% end %>
+
+  <%= control_group f, :title, "Subject" do %>
+    <%= f.text_field :title %>
+  <% end %>
+
+  <%= control_group f, :doc_date do %>
+    <div class="input-append date">
+      <%= f.text_field :doc_date, :style => 'cursor: pointer; width: 120px;'%>
+      <span class="btn" onclick="clearDateField('#document_doc_date');">Clear</span>
+    </div>
+  <% end %>
+
+  <%= control_group f, :content do %>
+    <%= f.cktext_area :content %>
+  <% end %>
+
+  <div align="right"><%= f.submit((f.object.new_record? ? 'Save ' : 'Update '), :class => "btn btn-primary") %></div>
+<% end %>

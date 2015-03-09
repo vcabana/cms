@@ -1,0 +1,16 @@
+<%= form_for(params[:shared_document], :url => email_document_path(document_id), :html => { :method => :put }) do |f| %>
+  <%= f.error_messages %>
+  
+  <%= control_group f, :shared_email_to, "To" do %>
+    <%= f.text_area :shared_email_to, :placeholder => "Type recipient email addresses", :rows =>5 %>
+    <em> Delimited by semi colon(;) </em>
+  <% end %>
+  
+  <%= control_group f, :message, 'Optional Message' do %>
+    <%= f.text_area :message, :rows => 5 %>
+  <% end %>
+
+  <%= f.hidden_field :document_id %>
+
+  <div align="right"><%= f.submit('Send', :class => "btn btn-primary") %></div>
+<% end %>

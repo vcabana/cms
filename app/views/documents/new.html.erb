@@ -1,0 +1,14 @@
+<% title "New Document" %>
+
+<!--Page Header-->
+<legend>New Document <%= @section.nil? ? '' : ('to "' + @section.name + '"') %></legend>
+
+<!--Display Image Icons Menu -->
+<div class="btn-toolbar" align = "right">
+  <div class="btn-group">
+    <%= link_to (image_tag(" ", :class=>"icon-home" )) + ' Home', root_url, :class=>"btn btn-primary", :title=>"Home" %>
+    <%= link_to (image_tag(" ", :class=>"icon-step-backward" )) + ' Back', 'javascript:history.back()', :class=>"btn btn-primary", :title=>"Back to Previous Page" %>
+  </div>
+</div>
+
+<%= render 'form' %>

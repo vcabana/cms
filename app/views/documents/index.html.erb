@@ -1,0 +1,67 @@
+<%#
+# To change this template, choose Tools | Templates
+# and open the template in the editor.
+%>
+
+<% title (@section.nil? ? "Browse" : @section.name.to_s) %>
+<!-- Search View -->
+<%= render :partial => 'search', :locals => {:section_id => @section_id} %>
+<!--Display Image Icons Menu -->
+<div class="btn-toolbar" align = "right">
+  <div class="btn-group">
+    <% if (is_user_admin? || is_user_editor?) && !@section.nil? %>
+      <%= link_to (image_tag(" ", :class=>"icon-file" )) + ' New Document', new_document_path(@section), :class=>"btn btn-primary", :title=>"New" %>
+    <% end %>
+    <%= link_to (image_tag(" ", :class=>"icon-home" )) + ' Home', root_url, :class=>"btn btn-primary", :title=>"Home" %>
+    <%= link_to (image_tag(" ", :class=>"icon-step-backward" )) + ' Back', 'javascript:history.back()', :class=>"btn btn-primary", :title=>"Back to Previous Page" %>
+  </div>
+</div>
+
+<% unless @section.nil? %>
+  <legend>
+    <%= raw @section.ancestors.map{|a| a.name }.join(' >> ') + (@section.is_root? ? '': ' >> ' ) + @section.name %>
+  </legend>
+<% end %>
+
+<!--Page Header-->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">
+      <%= page_entries_info @documents, :entry_name => "document", :window => 2 %>
+    </a>
+  </div>
+</div>
+<%- unless @documents.empty?-%>
+  <!-- Listing of Documents -->
+  <% if check_page_count(params[:page], @documents.size) %>
+    <%= raw paginate @documents %>
+  <% end %>
+  <table class="table table-hover">
+    <% @documents.each do |document| %>
+      <tr class="item-list" title="Click to view details"
+          onclick="location.href='<%= document_path(document, :search_param => params[:search_param]) %>'" style="cursor:pointer;">
+        <td>
+          <p class="lead">
+            <%= raw format_field_content(:issuance_no, document.issuance_no.html_safe, document.id) %>
+          </p>
+          <% if ((is_user_admin? || is_user_editor?) && !document.user.nil?) %>
+            <em>Uploaded by: <%= document.user.name %></em><br/>
+          <% end %>
+          <%= document.doc_date.strftime('%B %d, %Y') unless document.doc_date.blank? %><br/>
+          <p>
+            <%= raw format_field_content(:title, document.title.html_safe, document.id) %>
+          </p>
+          <em style="padding-left: 10px;">
+                <%= raw format_field_content(:temp_content, document.temp_content.html_safe, document.id) %>
+            </em>
+        </td>
+      </tr>
+
+    <% end %>
+  </table>
+<%- end -%>
+<div id="top-link-block" class="hidden" align="right">
+  <a href="#top" class="btn btn-primary" onclick="$('html,body').animate({scrollTop:0},'slow');return false;">
+    <i class="icon-chevron-up"></i> Back to Top
+  </a>
+</div><br/>

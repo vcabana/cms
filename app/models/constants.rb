@@ -1,0 +1,30 @@
+class Constants
+
+  HOURS_IN_A_DAY = 24
+  MINS_IN_AN_HOUR = 60
+  SECONDS_IN_A_MIN = 60
+  NO_OF_DAYS_BEFORE_ACCOUNT_SUSPENSION = 90
+  DATE_TODAY = Date.today
+  PAGE_COUNT = 25
+  USERS_PAGE_COUNT = 30
+
+  REGULAR_SEARCH = 1
+  ADVANCED_SEARCH = 2
+
+  SEARCH_TECHNIQUES = 1
+  WELCOME_REMARKS = 2
+  APP_CONTENT_LIST = {
+    SEARCH_TECHNIQUES => 'Search Techniques',
+    WELCOME_REMARKS => 'Welcome Remarks'
+  }
+
+  SEARCH_ALL_SECTIONS = 'Search all sections'
+  MAIN_SECTION = 'Main section'
+
+  BOOLEAN_AND = 'and'
+  BOOLEAN_OR = 'or'
+  BOOLEAN_NOT = 'not'
+  BOOLEAN_CHARS_ARR = [ BOOLEAN_AND , BOOLEAN_OR, BOOLEAN_NOT ]
+  BOOLEAN_CHARS = { BOOLEAN_AND => '', BOOLEAN_OR => '|', BOOLEAN_NOT => '!' }
+  
+end
