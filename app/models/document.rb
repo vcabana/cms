@@ -51,4 +51,9 @@ class Document < ActiveRecord::Base
     integer :user_id
 
   end
+
+  def temp_content
+    self.temp_content = self.content
+  end
+  
 end
