@@ -35,7 +35,6 @@ class Document < ActiveRecord::Base
   }
 
   # Sunspot index definition
-
   searchable do
     text :issuance_no, :stored => true
     text :title, :stored => true
