@@ -18,10 +18,6 @@ class Document < ActiveRecord::Base
     self.signatory = self.signatory.strip.squeeze(" ") unless self.signatory.blank?
   end
   
-#  before_save do
-#    self.content = self.content.gsub('&quot;', '"') unless self.content.blank?
-#    self.content = self.content.gsub('&quot;s', "'s") unless self.content.blank?
-#  end
 
   # Validation
   validates :issuance_no, :title, :doc_date, :content, :section_id, :presence => true
@@ -49,30 +45,10 @@ class Document < ActiveRecord::Base
     end
     text :signatory, :stored => true
     time :doc_date
-#    integer :section_ids, :multiple => true do
-#      Section.all.map(&:id)
-#    end
-#    integer :section_ids, :references => Section, :multiple => true
-#    integer :section_ids, :references => Section, :multiple => true
-#    , :stored => true do
-#      section_ids.all.map(&:section_id)
-#    end
     integer :section_id, :references => Section, :multiple => true
-#    integer :section_id
     boolean :is_edited
     integer :id
     integer :user_id
 
-  end
-
-#  def section_ids
-#    section.documents.map(&:section_id)
-#  end
-  def document_date
-    doc_date.to_s.tr('-', '').to_i unless doc_date.blank?
-  end
-
-  def temp_content
-    self.temp_content = self.content
   end
 end
